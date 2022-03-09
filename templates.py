@@ -38,7 +38,9 @@ class Template(Generic[P, T, F]):
     def __call__(self, *_, **__) -> NoReturn:
         raise ValueError(f"function {self._callable.__name__} requires generics")
     
-    def __getitem__(self, args: F.args, **_: F.kwargs) -> _GenericedTemplate[P, T]: # type: ignore
+    def __getitem__(self, a: F.args, **_: F.kwargs) -> _GenericedTemplate[P, T]: # type: ignore
+        args = [a] if not isinstance(a, tuple) else a
+
         if len(args) != self._generics:
             raise TemplateError(
                 f"function {self._callable.__name__} requires exactly {self._generics} generics, got {len(args)}"
